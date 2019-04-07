@@ -1,10 +1,12 @@
 package com.tyilo.schnappscounter
 
+import android.content.pm.ActivityInfo
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.KeyEvent
 import android.view.View
+import android.webkit.WebView
 import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.activity_fullscreen.*
 
@@ -58,8 +60,19 @@ class FullscreenActivity : AppCompatActivity() {
         // Set up the user interaction to manually show or hide the system UI.
         //fullscreen_content.setOnClickListener { toggle() }
 
-        fullscreen_content.setWebViewClient(WebViewClient());
-        fullscreen_content.getSettings().setJavaScriptEnabled(true)
+        WebView.setWebContentsDebuggingEnabled(true)
+        fullscreen_content.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView, url: String) {
+                if (url.contains("?landscape")) {
+                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                } else {
+                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                }
+            }
+        };
+        fullscreen_content.settings.javaScriptEnabled = true
+        fullscreen_content.settings.builtInZoomControls = true
+        fullscreen_content.settings.setSupportZoom(true)
         fullscreen_content.loadUrl("https://snapsecounter-app.serveo.net/")
 
         // Upon interacting with UI controls, delay any scheduled hide()
