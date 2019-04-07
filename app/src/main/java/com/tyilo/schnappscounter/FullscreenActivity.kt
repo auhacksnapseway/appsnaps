@@ -3,6 +3,7 @@ package com.tyilo.schnappscounter
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.KeyEvent
 import android.view.View
 import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.activity_fullscreen.*
@@ -65,6 +66,40 @@ class FullscreenActivity : AppCompatActivity() {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         //dummy_button.setOnTouchListener(mDelayHideTouchListener)
+    }
+
+    /*
+
+    @Override
+public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (event.getAction() == KeyEvent.ACTION_DOWN) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                if (mWebView.canGoBack()) {
+                    mWebView.goBack();
+                } else {
+                    finish();
+                }
+                return true;
+        }
+
+    }
+    return super.onKeyDown(keyCode, event);
+}
+     */
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (event?.action == KeyEvent.ACTION_DOWN) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                if (fullscreen_content.canGoBack()) {
+                    fullscreen_content.goBack()
+                } else {
+                    finish()
+                }
+                return true
+            }
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
